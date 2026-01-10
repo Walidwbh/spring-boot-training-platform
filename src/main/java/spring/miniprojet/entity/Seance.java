@@ -34,6 +34,8 @@ public class Seance {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cours_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Cours cours;
 
     public enum TypeSeance {

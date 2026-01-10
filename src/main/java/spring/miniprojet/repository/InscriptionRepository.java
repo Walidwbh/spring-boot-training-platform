@@ -32,4 +32,8 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Long> 
 
     @Query("SELECT COUNT(i) FROM Inscription i WHERE i.cours.id = :coursId AND i.statut = 'CONFIRMEE'")
     Long countByCoursIdAndStatutConfirmee(@Param("coursId") Long coursId);
+
+    @Query("SELECT i FROM Inscription i WHERE i.cours.id = :coursId AND i.statut = :statut")
+    List<Inscription> findByCoursIdAndStatut(@Param("coursId") Long coursId,
+            @Param("statut") Inscription.StatutInscription statut);
 }

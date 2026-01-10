@@ -26,4 +26,6 @@ public interface FormateurService {
     void delete(Long id);
 
     boolean existsByEmail(String email);
+
+    long count();
 }

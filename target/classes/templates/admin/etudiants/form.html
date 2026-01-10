@@ -65,8 +65,9 @@
                             
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" th:field="*{email}">
+                                    <label class="form-label">Email *</label>
+                                    <input type="email" class="form-control" th:field="*{email}" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Groupe</label>

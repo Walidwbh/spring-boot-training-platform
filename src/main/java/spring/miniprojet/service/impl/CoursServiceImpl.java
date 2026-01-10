@@ -156,4 +156,32 @@ public class CoursServiceImpl implements CoursService {
         Long reussites = noteRepository.countReussiteByCoursId(coursId, 10.0);
         return (reussites.doubleValue() / totalNotes.doubleValue()) * 100;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        return coursRepository.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<java.util.Map<String, Object>> findCoursLesPlusSuivis(int limit) {
+        java.util.List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+        java.util.List<Cours> allCours = coursRepository.findAll();
+
+        allCours.sort((c1, c2) -> {
+            Long count1 = coursRepository.countEtudiantsInscrits(c1.getId());
+            Long count2 = coursRepository.countEtudiantsInscrits(c2.getId());
+            return count2.compareTo(count1);
+        });
+
+        for (int i = 0; i < Math.min(limit, allCours.size()); i++) {
+            Cours c = allCours.get(i);
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            map.put("cours", c);
+            map.put("nombreInscrits", coursRepository.countEtudiantsInscrits(c.getId()));
+            result.add(map);
+        }
+        return result;
+    }
 }

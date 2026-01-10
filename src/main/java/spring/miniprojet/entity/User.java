@@ -38,9 +38,13 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy = "user")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Etudiant etudiant;
 
     @OneToOne(mappedBy = "user")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Formateur formateur;
 
     public enum Role {

@@ -32,9 +32,13 @@ public class Note {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "etudiant_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Etudiant etudiant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cours_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Cours cours;
 }

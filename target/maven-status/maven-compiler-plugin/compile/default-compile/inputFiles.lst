@@ -1,5 +1,6 @@
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\api\CoursRestController.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\config\SecurityConfig.java
+E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\PdfServiceImpl.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\entity\Specialite.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\SpecialiteServiceImpl.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\repository\SeanceRepository.java
@@ -30,6 +31,7 @@ E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\Sess
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\CoursService.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\repository\UserRepository.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\api\SeanceRestController.java
+E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\PdfService.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\entity\Groupe.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\FormateurController.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\FormateurServiceImpl.java
@@ -38,8 +40,11 @@ E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\Grou
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\repository\SessionPedagogiqueRepository.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\InscriptionService.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\entity\Note.java
+E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\FormateurDashboardController.java
+E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\PdfController.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\repository\CoursRepository.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\EtudiantServiceImpl.java
+E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\AdminDashboardController.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\EtudiantController.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\repository\NoteRepository.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\SeanceServiceImpl.java
@@ -49,6 +54,7 @@ E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\H
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\EmailServiceImpl.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\NoteServiceImpl.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\impl\UserServiceImpl.java
+E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\controller\EtudiantDashboardController.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\repository\FormateurRepository.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\service\EmailService.java
 E:\IIT\spring\workspace\mini-projet\src\main\java\spring\miniprojet\entity\Seance.java

@@ -28,16 +28,24 @@ public class Formateur {
 
     private String specialite;
 
+    @NotBlank(message = "L'email est obligatoire")
     @Email(message = "Email invalide")
     @Column(unique = true)
     private String email;
 
+    private String telephone;
+    private String adresse;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @OneToMany(mappedBy = "formateur", cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Cours> cours = new HashSet<>();
 
     public String getNomComplet() {

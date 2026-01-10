@@ -26,17 +26,25 @@ public class Groupe {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "specialite_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Specialite specialite;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "session_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private SessionPedagogique session;
 
     @OneToMany(mappedBy = "groupe")
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Etudiant> etudiants = new HashSet<>();
 
     @ManyToMany(mappedBy = "groupes")
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Cours> cours = new HashSet<>();
 }

@@ -7,6 +7,8 @@ import spring.miniprojet.entity.Etudiant;
 import spring.miniprojet.repository.EtudiantRepository;
 import spring.miniprojet.repository.NoteRepository;
 import spring.miniprojet.service.EtudiantService;
+import spring.miniprojet.service.UserService;
+import spring.miniprojet.entity.User;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -20,6 +22,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
     private final EtudiantRepository etudiantRepository;
     private final NoteRepository noteRepository;
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -71,6 +74,31 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiant.getDateInscription() == null) {
             etudiant.setDateInscription(LocalDate.now());
         }
+
+        // Create User account if not exists
+        if (etudiant.getUser() == null) {
+            // Ensure email is present
+            if (etudiant.getEmail() == null || etudiant.getEmail().isEmpty()) {
+                throw new RuntimeException("L'email est obligatoire pour créer un compte utilisateur");
+            }
+
+            // Check if user with this email already exists
+            if (userService.existsByEmail(etudiant.getEmail())) {
+                throw new RuntimeException("Un utilisateur avec cet email existe déjà");
+            }
+
+            User user = User.builder()
+                    .username(etudiant.getEmail()) // Use email as username
+                    .email(etudiant.getEmail())
+                    .password(etudiant.getMatricule()) // Use matricule as default password
+                    .role(User.Role.ETUDIANT)
+                    .enabled(true)
+                    .build();
+
+            user = userService.save(user); // Encodes password
+            etudiant.setUser(user);
+        }
+
         return etudiantRepository.save(etudiant);
     }
 
@@ -115,5 +143,11 @@ public class EtudiantServiceImpl implements EtudiantService {
     @Transactional(readOnly = true)
     public Double calculateMoyenneGenerale(Long etudiantId) {
         return noteRepository.calculateMoyenneByEtudiantId(etudiantId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        return etudiantRepository.count();
     }
 }

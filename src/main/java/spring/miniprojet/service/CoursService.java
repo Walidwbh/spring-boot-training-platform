@@ -42,4 +42,8 @@ public interface CoursService {
     Long countEtudiantsInscrits(Long coursId);
 
     Double getTauxReussite(Long coursId);
+
+    long count();
+
+    List<java.util.Map<String, Object>> findCoursLesPlusSuivis(int limit);
 }

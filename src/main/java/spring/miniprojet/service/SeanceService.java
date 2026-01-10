@@ -35,4 +35,6 @@ public interface SeanceService {
     boolean hasConflitFormateur(Long formateurId, LocalDate date, LocalTime heureDebut, LocalTime heureFin);
 
     boolean hasConflitSalle(String salle, LocalDate date, LocalTime heureDebut, LocalTime heureFin);
+
+    List<Seance> findByFormateurIdAndDateRange(Long formateurId, LocalDate dateDebut, LocalDate dateFin);
 }

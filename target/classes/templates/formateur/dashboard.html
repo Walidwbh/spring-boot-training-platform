@@ -26,10 +26,12 @@
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
-                <li><a th:href="@{/dashboard}" class="nav-link active"><i class="bi bi-speedometer2"></i> Tableau de bord</a></li>
-                <li><a th:href="@{/formateur/cours}" class="nav-link"><i class="bi bi-book"></i> Mes Cours</a></li>
-                <li><a th:href="@{/formateur/notes}" class="nav-link"><i class="bi bi-journal-check"></i> Saisie des Notes</a></li>
-                <li><a th:href="@{/formateur/seances}" class="nav-link"><i class="bi bi-calendar3"></i> Mes Séances</a></li>
+                <li><a th:href="@{/formateur/dashboard}" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i>Tableau de bord</a></li>
+                <li><a th:href="@{/formateur/cours}" class="nav-link"><i class="bi bi-book me-2"></i>Mes Cours</a></li>
+                <li><a th:href="@{/formateur/notes}" class="nav-link"><i class="bi bi-journal-check me-2"></i>Saisie des Notes</a></li>
+                <li><a th:href="@{/formateur/emploi-du-temps}" class="nav-link"><i class="bi bi-calendar3 me-2"></i>Emploi du temps</a></li>
+                <li><a th:href="@{/formateur/seances}" class="nav-link"><i class="bi bi-clock me-2"></i>Mes Séances</a></li>
+                <li><a th:href="@{/formateur/profil}" class="nav-link"><i class="bi bi-person me-2"></i>Mon Profil</a></li>
             </ul>
             <hr>
             <div class="dropdown">
@@ -37,6 +39,8 @@
                     <i class="bi bi-person-circle me-2"></i><strong th:text="${formateur?.nomComplet}">Formateur</strong>
                 </a>
                 <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{/formateur/profil}"><i class="bi bi-person me-2"></i>Profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li><form th:action="@{/logout}" method="post"><button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</button></form></li>
                 </ul>
             </div>
@@ -89,7 +93,10 @@
                                         <td th:text="${cours.titre}"></td>
                                         <td th:text="${cours.credits}"></td>
                                         <td>
-                                            <a th:href="@{/admin/notes/cours/{id}(id=${cours.id})}" class="btn btn-sm btn-info">
+                                            <a th:href="@{/formateur/cours/{id}/etudiants(id=${cours.id})}" class="btn btn-sm btn-info">
+                                                <i class="bi bi-people me-1"></i>Étudiants
+                                            </a>
+                                            <a th:href="@{/formateur/notes/cours/{id}(id=${cours.id})}" class="btn btn-sm btn-warning text-dark">
                                                 <i class="bi bi-journal-check me-1"></i>Notes
                                             </a>
                                         </td>

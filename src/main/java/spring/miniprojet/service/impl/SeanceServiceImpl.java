@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.miniprojet.entity.Cours;
+import spring.miniprojet.entity.Groupe;
 import spring.miniprojet.entity.Seance;
 import spring.miniprojet.repository.CoursRepository;
 import spring.miniprojet.repository.SeanceRepository;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +90,19 @@ public class SeanceServiceImpl implements SeanceService {
             throw new RuntimeException("La salle est déjà occupée à cette heure");
         }
 
+        // Vérifier les conflits de groupes (étudiants)
+        if (!cours.getGroupes().isEmpty()) {
+            List<Long> groupeIds = cours.getGroupes().stream()
+                    .map(Groupe::getId)
+                    .collect(Collectors.toList());
+
+            List<Seance> conflitsGroupes = seanceRepository.findConflitsGroupes(groupeIds, date, heureDebut, heureFin);
+            if (!conflitsGroupes.isEmpty()) {
+                throw new RuntimeException(
+                        "Un ou plusieurs groupes d'étudiants (et donc les étudiants associés) ont déjà cours à cette heure");
+            }
+        }
+
         Seance seance = Seance.builder()
                 .cours(cours)
                 .dateSeance(date)
@@ -131,5 +146,11 @@ public class SeanceServiceImpl implements SeanceService {
     public boolean hasConflitSalle(String salle, LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
         List<Seance> conflits = seanceRepository.findConflitsSalle(salle, date, heureDebut, heureFin);
         return !conflits.isEmpty();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Seance> findByFormateurIdAndDateRange(Long formateurId, LocalDate dateDebut, LocalDate dateFin) {
+        return seanceRepository.findByFormateurIdAndDateRange(formateurId, dateDebut, dateFin);
     }
 }

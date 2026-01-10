@@ -61,7 +61,8 @@ public class UserServiceImpl implements UserService {
                 .map(existing -> {
                     existing.setEmail(user.getEmail());
                     existing.setEnabled(user.getEnabled());
-                    if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                    if (user.getPassword() != null && !user.getPassword().isEmpty()
+                            && !user.getPassword().equals(existing.getPassword())) {
                         existing.setPassword(passwordEncoder.encode(user.getPassword()));
                     }
                     return userRepository.save(existing);

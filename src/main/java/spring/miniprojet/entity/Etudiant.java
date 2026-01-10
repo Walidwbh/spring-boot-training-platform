@@ -22,7 +22,6 @@ public class Etudiant {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    @NotBlank(message = "Le matricule est obligatoire")
     private String matricule;
 
     @NotBlank(message = "Le nom est obligatoire")
@@ -31,27 +30,42 @@ public class Etudiant {
     @NotBlank(message = "Le prénom est obligatoire")
     private String prenom;
 
+    @NotBlank(message = "L'email est obligatoire")
     @Email(message = "Email invalide")
     @Column(unique = true)
     private String email;
+
+    private String telephone;
+    private String adresse;
+
+    @Column(name = "date_naissance")
+    private LocalDate dateNaissance;
 
     @Column(name = "date_inscription")
     private LocalDate dateInscription;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupe_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Groupe groupe;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Inscription> inscriptions = new HashSet<>();
 
     @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Note> notes = new HashSet<>();
 
     public String getNomComplet() {

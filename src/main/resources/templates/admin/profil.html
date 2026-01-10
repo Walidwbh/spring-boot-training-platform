@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fc; }
+        .sidebar { min-height: 100vh; background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); }
+        .sidebar .nav-link { color: rgba(255, 255, 255, 0.8); padding: 1rem; }
+        .sidebar .nav-link:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
+        .sidebar .nav-link.active { color: #fff; background-color: rgba(255, 255, 255, 0.2); }
+        .card { border: none; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15); }
+        .topbar { height: 4.375rem; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15); }
+        .profile-img { width: 150px; height: 150px; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column p-3" style="width: 250px;">
+            <a href="/admin/dashboard" class="d-flex align-items-center mb-3 text-white text-decoration-none">
+                <i class="bi bi-shield-lock-fill fs-4 me-2"></i><span class="fs-5">Administration</span>
+            </a>
+            <hr class="text-white">
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li><a th:href="@{/admin/dashboard}" class="nav-link"><i class="bi bi-speedometer2 me-2"></i>Tableau de bord</a></li>
+                <li><a th:href="@{/admin/cours/list}" class="nav-link"><i class="bi bi-book me-2"></i>Cours</a></li>
+                <li><a th:href="@{/admin/etudiants/list}" class="nav-link"><i class="bi bi-people me-2"></i>Étudiants</a></li>
+                <li><a th:href="@{/admin/formateurs/list}" class="nav-link"><i class="bi bi-person-badge me-2"></i>Formateurs</a></li>
+                <li><a th:href="@{/admin/profil}" class="nav-link active"><i class="bi bi-person me-2"></i>Mon Profil</a></li>
+            </ul>
+            <hr class="text-white">
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle me-2"></i><strong th:text="${user?.email}">Admin</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><form th:action="@{/logout}" method="post"><button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</button></form></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4">
+                <div class="container-fluid">
+                    <h4 class="mb-0"><i class="bi bi-person me-2"></i>Mon Profil</h4>
+                </div>
+            </nav>
+
+            <div class="container-fluid px-4">
+                <!-- Alerts -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="row">
+                    <!-- Profile Info Card -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center profile-img mb-3">
+                                    <i class="bi bi-shield-check text-white display-3"></i>
+                                </div>
+                                <h4 class="mb-1">Administrateur</h4>
+                                <p class="text-muted mb-2" th:text="${user?.email}">admin@example.com</p>
+                                <span class="badge bg-primary">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Form -->
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="bi bi-pencil me-2"></i>Modifier mes informations
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/admin/profil/update}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="email" class="form-control" th:value="${user?.email}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-check-lg me-1"></i>Enregistrer les modifications
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Change Password Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="m-0 font-weight-bold text-warning">
+                                    <i class="bi bi-key me-2"></i>Changer le mot de passe
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/admin/profil/password}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Mot de passe actuel</label>
+                                        <input type="password" name="currentPassword" class="form-control" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Nouveau mot de passe</label>
+                                            <input type="password" name="newPassword" class="form-control" required minlength="6">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Confirmer le mot de passe</label>
+                                            <input type="password" name="confirmPassword" class="form-control" required minlength="6">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="bi bi-key me-1"></i>Modifier le mot de passe
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -37,10 +37,14 @@ public class SessionPedagogique {
 
     @OneToMany(mappedBy = "session")
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Cours> cours = new HashSet<>();
 
     @OneToMany(mappedBy = "session")
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Groupe> groupes = new HashSet<>();
 
     public enum TypeSession {

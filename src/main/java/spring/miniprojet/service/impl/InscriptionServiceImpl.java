@@ -149,4 +149,22 @@ public class InscriptionServiceImpl implements InscriptionService {
             return false;
         return inscriptionRepository.existsByEtudiantAndCours(etudiant, cours);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        return inscriptionRepository.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<Inscription> findByStatut(Inscription.StatutInscription statut) {
+        return inscriptionRepository.findByStatut(statut);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<Inscription> findByCoursIdAndStatut(Long coursId, Inscription.StatutInscription statut) {
+        return inscriptionRepository.findByCoursIdAndStatut(coursId, statut);
+    }
 }

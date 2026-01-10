@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.miniprojet.entity.Formateur;
 import spring.miniprojet.repository.FormateurRepository;
 import spring.miniprojet.service.FormateurService;
+import spring.miniprojet.service.UserService;
+import spring.miniprojet.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class FormateurServiceImpl implements FormateurService {
 
     private final FormateurRepository formateurRepository;
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,6 +58,29 @@ public class FormateurServiceImpl implements FormateurService {
 
     @Override
     public Formateur save(Formateur formateur) {
+        // Create User account if not exists
+        if (formateur.getUser() == null) {
+            // Ensure email is present
+            if (formateur.getEmail() == null || formateur.getEmail().isEmpty()) {
+                throw new RuntimeException("L'email est obligatoire pour créer un compte utilisateur");
+            }
+
+            // Check if user with this email already exists
+            if (userService.existsByEmail(formateur.getEmail())) {
+                throw new RuntimeException("Un utilisateur avec cet email existe déjà");
+            }
+
+            User user = User.builder()
+                    .username(formateur.getEmail()) // Use email as username
+                    .email(formateur.getEmail())
+                    .password("password") // Default password
+                    .role(User.Role.FORMATEUR)
+                    .enabled(true)
+                    .build();
+
+            user = userService.save(user); // Encodes password
+            formateur.setUser(user);
+        }
         return formateurRepository.save(formateur);
     }
 
@@ -80,5 +106,11 @@ public class FormateurServiceImpl implements FormateurService {
     @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
         return formateurRepository.existsByEmail(email);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        return formateurRepository.count();
     }
 }

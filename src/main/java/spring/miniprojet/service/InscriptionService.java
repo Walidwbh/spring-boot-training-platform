@@ -26,4 +26,10 @@ public interface InscriptionService {
     void delete(Long id);
 
     boolean isEtudiantInscrit(Long etudiantId, Long coursId);
+
+    long count();
+
+    List<Inscription> findByStatut(Inscription.StatutInscription statut);
+
+    List<Inscription> findByCoursIdAndStatut(Long coursId, Inscription.StatutInscription statut);
 }

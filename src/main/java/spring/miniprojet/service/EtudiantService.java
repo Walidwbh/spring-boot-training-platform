@@ -34,4 +34,6 @@ public interface EtudiantService {
     String generateMatricule();
 
     Double calculateMoyenneGenerale(Long etudiantId);
+
+    long count();
 }
