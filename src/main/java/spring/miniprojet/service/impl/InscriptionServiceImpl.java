@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.miniprojet.entity.Cours;
+import spring.miniprojet.entity.Groupe;
 import spring.miniprojet.entity.Etudiant;
 import spring.miniprojet.entity.Inscription;
 import spring.miniprojet.repository.CoursRepository;
 import spring.miniprojet.repository.EtudiantRepository;
+import spring.miniprojet.repository.GroupeRepository;
 import spring.miniprojet.repository.InscriptionRepository;
 import spring.miniprojet.service.EmailService;
 import spring.miniprojet.service.InscriptionService;
@@ -24,6 +26,7 @@ public class InscriptionServiceImpl implements InscriptionService {
     private final InscriptionRepository inscriptionRepository;
     private final EtudiantRepository etudiantRepository;
     private final CoursRepository coursRepository;
+    private final GroupeRepository groupeRepository;
     private final EmailService emailService;
 
     @Override
@@ -107,7 +110,23 @@ public class InscriptionServiceImpl implements InscriptionService {
         return inscriptionRepository.findById(inscriptionId)
                 .map(inscription -> {
                     inscription.setStatut(Inscription.StatutInscription.CONFIRMEE);
-                    return inscriptionRepository.save(inscription);
+                    Inscription saved = inscriptionRepository.save(inscription);
+
+                    // Add student to one of the course's groups
+                    // Fetch course fresh to ensure groupes are loaded
+                    Cours cours = coursRepository.findById(inscription.getCours().getId()).orElse(null);
+                    if (cours != null && !cours.getGroupes().isEmpty()) {
+                        Groupe groupe = cours.getGroupes().iterator().next(); // Get first group
+                        Etudiant etudiant = inscription.getEtudiant();
+                        if (!groupe.getEtudiants().contains(etudiant)) {
+                            groupe.getEtudiants().add(etudiant);
+                            etudiant.setGroupe(groupe);
+                            etudiantRepository.save(etudiant);
+                            groupeRepository.save(groupe); // Save the group with the updated student list
+                        }
+                    }
+
+                    return saved;
                 })
                 .orElseThrow(() -> new RuntimeException("Inscription non trouvée"));
     }
@@ -118,9 +137,21 @@ public class InscriptionServiceImpl implements InscriptionService {
                 .map(inscription -> {
                     inscription.setStatut(Inscription.StatutInscription.ANNULEE);
 
-                    // Notifier le formateur de la désinscription
+                    // Remove student from the course's group
                     Cours cours = inscription.getCours();
                     Etudiant etudiant = inscription.getEtudiant();
+                    if (cours != null && !cours.getGroupes().isEmpty()) {
+                        for (Groupe groupe : cours.getGroupes()) {
+                            if (groupe.getEtudiants().contains(etudiant)) {
+                                groupe.getEtudiants().remove(etudiant);
+                                groupeRepository.save(groupe); // Save the group with updated student list
+                            }
+                        }
+                        etudiant.setGroupe(null);
+                        etudiantRepository.save(etudiant);
+                    }
+
+                    // Notifier le formateur de la désinscription
                     if (cours.getFormateur() != null && cours.getFormateur().getEmail() != null) {
                         emailService.notifyFormateurInscription(
                                 cours.getFormateur().getEmail(),
@@ -137,7 +168,25 @@ public class InscriptionServiceImpl implements InscriptionService {
 
     @Override
     public void delete(Long id) {
-        inscriptionRepository.deleteById(id);
+        inscriptionRepository.findById(id)
+                .ifPresent(inscription -> {
+                    // Remove student from the course's group before deleting
+                    Cours cours = inscription.getCours();
+                    Etudiant etudiant = inscription.getEtudiant();
+                    if (cours != null && !cours.getGroupes().isEmpty()) {
+                        for (Groupe groupe : cours.getGroupes()) {
+                            if (groupe.getEtudiants().contains(etudiant)) {
+                                groupe.getEtudiants().remove(etudiant);
+                                groupeRepository.save(groupe); // Save the group with updated student list
+                            }
+                        }
+                        etudiant.setGroupe(null);
+                        etudiantRepository.save(etudiant);
+                    }
+
+                    // Delete the inscription
+                    inscriptionRepository.deleteById(id);
+                });
     }
 
     @Override

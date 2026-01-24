@@ -28,7 +28,7 @@ public class User {
     private String password;
 
     @NotBlank(message = "L'email est obligatoire")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Builder.Default

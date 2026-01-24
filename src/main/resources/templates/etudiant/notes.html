@@ -65,14 +65,14 @@
                 <div class="row mb-4">
                     <div class="col-lg-4">
                         <div class="card bg-gradient text-white" style="background: linear-gradient(135deg, #1cc88a, #17a673);">
-                            <div class="card-body text-center">
-                                <h6 class="text-uppercase mb-2">Moyenne Générale</h6>
-                                <h1 class="display-4 fw-bold">
+                            <div class="card-body text-center" style="background-color: rgb(1 65 159 / 25%);">
+                                <h6 class="text-uppercase mb-3 font-weight-bold" style="font-size: 0.85rem; letter-spacing: 1px;">Moyenne Générale</h6>
+                                <h1 class="display-3 fw-bold" style="color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
                                     <span th:if="${moyenne != null}" th:text="${#numbers.formatDecimal(moyenne, 1, 2)}"></span>
                                     <span th:unless="${moyenne != null}">N/A</span>
-                                    <small class="fs-4">/20</small>
                                 </h1>
-                                <p class="mb-0">
+                                <small class="fs-5" style="color: rgba(255,255,255,0.95);">/20</small>
+                                <p class="mb-0 mt-3" style="font-size: 0.95rem;">
                                     <span th:if="${moyenne != null && moyenne >= 16}">🏆 Excellent!</span>
                                     <span th:if="${moyenne != null && moyenne >= 14 && moyenne < 16}">👏 Très bien!</span>
                                     <span th:if="${moyenne != null && moyenne >= 12 && moyenne < 14}">👍 Bien!</span>

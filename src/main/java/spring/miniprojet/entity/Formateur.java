@@ -22,29 +22,31 @@ public class Formateur {
     private Long id;
 
     @NotBlank(message = "Le nom est obligatoire")
+    @Column(nullable = false)
     private String nom;
 
     @NotBlank(message = "Le prénom est obligatoire")
+    @Column(nullable = false)
     private String prenom;
 
     private String specialite;
 
     @NotBlank(message = "L'email est obligatoire")
     @Email(message = "Email invalide")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String telephone;
     private String adresse;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "formateur", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "formateur")
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

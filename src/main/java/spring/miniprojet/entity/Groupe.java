@@ -21,6 +21,7 @@ public class Groupe {
     private Long id;
 
     @NotBlank(message = "Le nom est obligatoire")
+    @Column(nullable = false)
     private String nom;
 
     private String niveau;

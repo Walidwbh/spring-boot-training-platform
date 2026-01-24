@@ -3,13 +3,16 @@ package spring.miniprojet.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
+import org.hibernate.annotations.Check;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "cours")
+@Check(constraints = "credits IS NULL OR credits > 0")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,11 +28,13 @@ public class Cours {
     private String code;
 
     @NotBlank(message = "Le titre est obligatoire")
+    @Column(nullable = false)
     private String titre;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Positive(message = "Les crédits doivent être positifs")
     private Integer credits;
 
     @ManyToOne(fetch = FetchType.LAZY)

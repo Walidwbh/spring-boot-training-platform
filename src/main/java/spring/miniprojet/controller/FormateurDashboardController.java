@@ -97,7 +97,8 @@ public class FormateurDashboardController {
             return "redirect:/formateur/cours";
         }
 
-        List<Inscription> inscriptions = inscriptionService.findByCoursId(id);
+        List<Inscription> inscriptions = inscriptionService.findByCoursIdAndStatut(id,
+                Inscription.StatutInscription.CONFIRMEE);
         List<Note> notes = noteService.findByCoursId(id);
 
         model.addAttribute("formateur", formateur);

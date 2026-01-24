@@ -26,14 +26,16 @@ public class Etudiant {
     private String matricule;
 
     @NotBlank(message = "Le nom est obligatoire")
+    @Column(nullable = false)
     private String nom;
 
     @NotBlank(message = "Le prénom est obligatoire")
+    @Column(nullable = false)
     private String prenom;
 
     @NotBlank(message = "L'email est obligatoire")
     @Email(message = "Email invalide")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String telephone;
@@ -52,7 +54,7 @@ public class Etudiant {
     @JsonIgnore
     private Groupe groupe;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

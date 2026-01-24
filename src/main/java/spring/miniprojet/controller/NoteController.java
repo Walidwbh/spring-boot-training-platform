@@ -46,8 +46,9 @@ public class NoteController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("note", noteService.findById(id).orElseThrow());
-        return "admin/notes/edit";
+        var note = noteService.findById(id).orElseThrow();
+        model.addAttribute("note", note);
+        return "admin/notes/form";
     }
 
     @PostMapping("/update/{id}")

@@ -21,7 +21,7 @@ public class Specialite {
     private Long id;
 
     @NotBlank(message = "Le nom est obligatoire")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String nom;
 
     private String description;

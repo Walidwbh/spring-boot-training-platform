@@ -6,12 +6,15 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 
+import org.hibernate.annotations.Check;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "notes", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "etudiant_id", "cours_id" })
 })
+@Check(constraints = "valeur IS NULL OR (valeur >= 0 AND valeur <= 20)")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

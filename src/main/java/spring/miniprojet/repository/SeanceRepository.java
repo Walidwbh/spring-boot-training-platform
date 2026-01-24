@@ -27,7 +27,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
         @Query("SELECT s FROM Seance s WHERE s.cours.formateur.id = :formateurId AND s.dateSeance = :date")
         List<Seance> findByFormateurIdAndDate(@Param("formateurId") Long formateurId, @Param("date") LocalDate date);
 
-        @Query("SELECT s FROM Seance s JOIN s.cours.groupes g JOIN g.etudiants e WHERE e.id = :etudiantId AND s.dateSeance BETWEEN :dateDebut AND :dateFin ORDER BY s.dateSeance, s.heureDebut")
+        @Query("SELECT s FROM Seance s WHERE s.cours.id IN (SELECT i.cours.id FROM Inscription i WHERE i.etudiant.id = :etudiantId AND i.statut = 'CONFIRMEE') AND s.dateSeance BETWEEN :dateDebut AND :dateFin ORDER BY s.dateSeance, s.heureDebut")
         List<Seance> findByEtudiantIdAndDateBetween(@Param("etudiantId") Long etudiantId,
                         @Param("dateDebut") LocalDate dateDebut, @Param("dateFin") LocalDate dateFin);
 

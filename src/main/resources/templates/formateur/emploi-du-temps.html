@@ -96,7 +96,7 @@
                         </div>
 
                         <div th:each="seance : ${seancesSemaine}" class="card shadow-sm mb-3 seance-card border-left-primary"
-                             th:classappend="${seance.dateSeance.equals(T(java.time.LocalDate).now()) ? 'today-highlight' : ''}">
+                             th:classappend="${seance.dateSeance == T(java.time.LocalDate).now() ? 'today-highlight' : ''}">
                             <div class="card-body">
                                 <div class="row align-items-center">
                                     <!-- Date -->
@@ -113,7 +113,7 @@
                                     <div class="col-md-5 border-start border-end ps-4">
                                         <h5 class="font-weight-bold text-primary mb-1" th:text="${seance.cours.titre}">Programmation Java</h5>
                                         <div class="text-muted small">
-                                            <span class="badge bg-secondary me-2" th:text="${seance.typeSeance}">COURS</span>
+                                            <span class="badge bg-secondary me-2" th:text="${seance.type}">COURS</span>
                                             <span th:text="${seance.cours.code}">INFO-101</span>
                                         </div>
                                     </div>
