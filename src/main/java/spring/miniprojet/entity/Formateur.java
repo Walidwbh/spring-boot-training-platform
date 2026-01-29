@@ -2,49 +2,30 @@ package spring.miniprojet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité Formateur qui hérite de Personne.
+ * 
+ * Type d'héritage JPA: @MappedSuperclass
+ * - La table "formateurs" contient tous les champs hérités de Personne
+ * - Plus les champs spécifiques à Formateur (specialite, cours)
+ */
 @Entity
 @Table(name = "formateurs")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Formateur {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank(message = "Le nom est obligatoire")
-    @Column(nullable = false)
-    private String nom;
-
-    @NotBlank(message = "Le prénom est obligatoire")
-    @Column(nullable = false)
-    private String prenom;
+@SuperBuilder
+public class Formateur extends Personne {
 
     private String specialite;
-
-    @NotBlank(message = "L'email est obligatoire")
-    @Email(message = "Email invalide")
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    private String telephone;
-    private String adresse;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    private User user;
 
     @OneToMany(mappedBy = "formateur")
     @Builder.Default
@@ -52,8 +33,4 @@ public class Formateur {
     @EqualsAndHashCode.Exclude
     @JsonIgnore
     private Set<Cours> cours = new HashSet<>();
-
-    public String getNomComplet() {
-        return prenom + " " + nom;
-    }
 }

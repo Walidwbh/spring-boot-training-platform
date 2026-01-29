@@ -2,44 +2,32 @@ package spring.miniprojet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité Etudiant qui hérite de Personne.
+ * 
+ * Type d'héritage JPA: @MappedSuperclass
+ * - La table "etudiants" contient tous les champs hérités de Personne
+ * - Plus les champs spécifiques à Etudiant (matricule, dateNaissance, etc.)
+ */
 @Entity
 @Table(name = "etudiants")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Etudiant {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SuperBuilder
+public class Etudiant extends Personne {
 
     @Column(unique = true, nullable = false)
     private String matricule;
-
-    @NotBlank(message = "Le nom est obligatoire")
-    @Column(nullable = false)
-    private String nom;
-
-    @NotBlank(message = "Le prénom est obligatoire")
-    @Column(nullable = false)
-    private String prenom;
-
-    @NotBlank(message = "L'email est obligatoire")
-    @Email(message = "Email invalide")
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    private String telephone;
-    private String adresse;
 
     @Column(name = "date_naissance")
     private LocalDate dateNaissance;
@@ -54,13 +42,6 @@ public class Etudiant {
     @JsonIgnore
     private Groupe groupe;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    private User user;
-
     @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
@@ -74,8 +55,4 @@ public class Etudiant {
     @EqualsAndHashCode.Exclude
     @JsonIgnore
     private Set<Note> notes = new HashSet<>();
-
-    public String getNomComplet() {
-        return prenom + " " + nom;
-    }
 }
